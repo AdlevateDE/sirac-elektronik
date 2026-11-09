@@ -1,0 +1,659 @@
+<!doctype html>
+<html lang="de" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>SiRAC ELEKTRONiK · Chiptuning und Kfz-Elektronik in Braunschweig</title>
+<meta name="description" content="Chiptuning, Software-Optimierung, Fehlerdiagnose, Steuergeräte und Kfz-Schlüssel in Braunschweig. Anfrage per WhatsApp, Rückmeldung werktags.">
+<link rel="preload" as="font" type="font/woff2" href="fonts/schibsted-normal.woff2" crossorigin>
+<link rel="preload" as="image" href="assets/k_hero_car_a-1200.webp" imagesrcset="assets/k_hero_car_a-800.webp 800w, assets/k_hero_car_a-1200.webp 1200w, assets/k_hero_car_a-1800.webp 1800w, assets/k_hero_car_a-2400.webp 2400w" imagesizes="100vw" fetchpriority="high">
+<style>
+@font-face{font-family:'Schibsted Grotesk';font-style:normal;font-weight:500 900;font-display:swap;src:url(fonts/schibsted-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Source Serif 4';font-style:italic;font-weight:300 700;font-display:swap;src:url(fonts/sourceserif-italic.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Source Serif 4';font-style:normal;font-weight:300 700;font-display:swap;src:url(fonts/sourceserif-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Source Serif Fallback';src:local('Georgia');size-adjust:103%;ascent-override:101%;descent-override:33%}
+/* Tuning-Film: Lack-Schwarz als Grund, Signalrot als Akzent, Glut-Orange für Tacho, Lichtspuren, Flammen, Ziffern (Visitenkarte gemessen). */
+:root{
+  --bg:#0e0c0c;
+  --panel:#1a1817;
+  --ink:#f4eee5;
+  --muted:#a39b96;
+  --red:#d9311c;
+  --red-deep:#b4220f;
+  --ember:#f37443;
+  --ember-rim:#f99955;
+  --amber:#e1b085;
+  --chrome:#525059;
+  --night:#0f0d0d;
+  --line:rgba(244,238,229,.14);
+  --display:"Schibsted Grotesk",system-ui,sans-serif;
+  --text:"Source Serif 4","Source Serif Fallback",Georgia,serif;
+  --ease-out-quart:cubic-bezier(0.23,1,0.32,1);
+  --pad:clamp(20px,5vw,72px);
+}
+*{box-sizing:border-box}
+html{background:var(--bg)} .lenis.lenis-smooth{scroll-behavior:auto!important}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--text);font-size:clamp(17px,1.15vw,19px);line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:inherit} img,video{display:block;max-width:100%}
+.wrap{max-width:1320px;margin:0 auto;padding-left:var(--pad);padding-right:var(--pad)}
+.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:clamp(16px,2.4vw,32px)}
+h1,h2{font-family:var(--display);font-weight:800;letter-spacing:-.02em;line-height:.98;margin:0;text-wrap:balance}
+h2{font-size:clamp(2.1rem,4.2vw,4rem)}
+.btn{display:inline-flex;align-items:center;font-family:var(--display);font-weight:700;font-size:1rem;text-decoration:none;padding:15px 22px;border-radius:3px;cursor:pointer;border:0;
+  transition:transform 140ms var(--ease-out-quart),background-color 140ms var(--ease-out-quart)}
+.btn:hover{transform:translateY(-2px)} .btn:active{transform:scale(.97)} .btn:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.btn-line{border:1.5px solid currentColor;background:transparent;color:inherit}
+/* WhatsApp-Grün nur für Knöpfe, die wirklich WhatsApp öffnen (Benjamin 03.11.); dunkle Schrift: 9,8:1 auf #25D366 */
+.btn-wa{background:#25D366;color:#0b141a;gap:10px} .btn-wa:hover{background:#1ebe5d} .btn-wa svg{width:20px;height:20px;flex:0 0 auto}
+/* Hero-Nummer durchsichtig: Rand, Nummer und Logo in WhatsApp-Grün (Benjamin 03.11.); #25D366 auf dem dunklen Hero ≥ 7:1 */
+.btn-wa-line{background:rgba(14,12,12,.35);color:#25D366;border:1.5px solid #25D366;backdrop-filter:blur(4px)} .btn-wa-line:hover{background:rgba(37,211,102,.14)}
+.bar{display:none}
+@media (max-width:860px){
+  .bar{display:flex;gap:10px;position:fixed;left:0;right:0;bottom:0;z-index:40;padding:10px max(16px,env(safe-area-inset-left,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-right,0px));
+    background:rgba(14,12,12,.94);border-top:1px solid var(--line)}
+  .bar .btn{flex:1;justify-content:center;padding:14px 12px}
+}
+
+/* ---- Szene 1 · Hero als Vollbild (Drei-Stile "Nacht"): Foto füllt alles, Text unten links, Tacho oben rechts, Startknopf dominant */
+.hero{position:relative;min-height:100svh;display:flex;align-items:flex-end;overflow:hidden;background:var(--night);padding:0 0 clamp(40px,7vh,88px)}
+.hero .shot{position:absolute;inset:0;transform:scaleX(-1)} /* Foto gespiegelt; Zoom läuft auf den Bildern darin, Tacho/Text bleiben richtig herum */
+.hero .base,.hero .flames{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 55%;will-change:transform}
+.hero .flames{opacity:0}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,12,12,.38) 0%,rgba(14,12,12,.04) 28%,rgba(14,12,12,.58) 58%,rgba(14,12,12,.94) 100%);pointer-events:none}
+.hero .copy{position:relative;z-index:2;width:100%}
+.firm{font-family:var(--display);font-weight:600;font-size:.95rem;color:var(--muted);margin:0 0 clamp(16px,3vh,32px)}
+.firm b{color:var(--ink);font-weight:700} .firm i{font-style:normal;color:var(--ember)}
+h1{font-size:clamp(2.8rem,6.2vw,6.4rem)} h1 em{font-style:normal;color:var(--red)}
+.ln{display:block;overflow:hidden} .ln>span{display:block}
+.sub{margin:clamp(16px,2.6vh,28px) 0 0;max-width:15.98em;font-size:1.12rem;color:var(--ink)} .sub-short{display:none}
+.cta{display:flex;flex-wrap:wrap;align-items:center;gap:36px;margin-top:clamp(22px,4vh,40px)} /* ≥ 32 px Luft neben dem Knopf, Text mittig zur Kuppel */
+/* Startknopf: das wichtigste Element der Seite. Roter Ring mit Schein, dunkler Hof dahinter, zweiter Ring pulsiert (schneller, wenn der Zeiger nah ist). */
+/* Start/Stop-Knopf wie im Auto (Benjamin 03.11., Referenzfoto): Chromring außen, mattschwarze Fassung, rote glänzende Kuppel mit Glanzlicht oben,
+   weiße gesperrte Versalien gestapelt (ANFRAGE groß, START klein). Hover/Touch: Kuppel sinkt 2 px und wird heller (dazu Nadel, Flamme, Spuren aus). */
+.start{position:relative;z-index:0;display:block;width:200px;height:200px;border-radius:50%;padding:6px;text-decoration:none;color:#fff;cursor:pointer;flex:0 0 auto;
+  background:linear-gradient(135deg,#f2f2f4 0%,#a8acb1 28%,#e6e7ea 50%,#8a8e94 72%,#d9dadd 100%); /* gebürsteter Chromring */
+  box-shadow:0 10px 24px rgba(0,0,0,.55),0 0 0 7px rgba(217,49,28,.10),0 0 26px rgba(217,49,28,.30);transition:box-shadow 240ms var(--ease-out-quart)} /* Benjamin 03.11.: matter, weniger Leuchten */
+.start .bezel{display:block;width:100%;height:100%;border-radius:50%;padding:12px;background:#141214;box-shadow:inset 0 2px 6px rgba(0,0,0,.9),inset 0 -1px 2px rgba(255,255,255,.08)}
+.start .kappe{position:relative;display:grid;place-items:center;align-content:center;gap:6px;width:100%;height:100%;border-radius:50%; /* "kappe", nicht "cap": .cap gehört den Film-Unterschriften */
+  background:radial-gradient(circle at 50% 30%,#e04a33 0%,var(--red) 34%,#b0250f 76%,#861b0b 100%); /* matt, aber dasselbe Rot wie die Überschrift (Benjamin 03.11.); Textzone ab 34 %: Weiß auf #d9311c 4,4:1, fett ≥ 20 px */
+  box-shadow:inset 0 -12px 22px rgba(0,0,0,.42),inset 0 3px 6px rgba(255,255,255,.10),0 3px 6px rgba(0,0,0,.6);
+  transition:transform 120ms var(--ease-out-quart),filter 120ms var(--ease-out-quart)}
+.start .kappe::before{content:"";position:absolute;left:16%;right:16%;top:5%;height:30%;border-radius:50%;background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,0));pointer-events:none} /* Glanzlicht, matt (Benjamin 03.11.) */
+.start b,.start small{display:block;position:relative;font-family:var(--display);text-transform:uppercase;text-align:center;line-height:1;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.5)}
+.start b{font-weight:800;font-size:1.72rem;letter-spacing:.05em}
+.start small{font-weight:700;font-size:.95rem;letter-spacing:.22em}
+.start:hover .kappe,.start.near .kappe{transform:translateY(2px);filter:brightness(1.06)}
+.start:active .kappe{transform:translateY(3px);filter:brightness(1.1)}
+.start:hover,.start.near{box-shadow:0 10px 24px rgba(0,0,0,.55),0 0 0 9px rgba(217,49,28,.16),0 0 40px rgba(217,49,28,.5)}
+.start:focus-visible{outline:3px solid #fff;outline-offset:6px}
+.start::before{content:"";position:absolute;inset:-4px;border-radius:50%;border:4px solid var(--red);opacity:0;transform:scale(1);pointer-events:none} /* pulsierender Ring darf den Trefferbereich nicht vergrößern */
+.start::after{content:"";position:absolute;inset:-110px;border-radius:50%;background:radial-gradient(circle,rgba(14,12,12,.62) 0%,rgba(14,12,12,.3) 45%,rgba(14,12,12,0) 72%);z-index:-1;pointer-events:none}
+@media (prefers-reduced-motion:no-preference){
+  .start::before{animation:ring 2.6s var(--ease-out-quart) infinite}
+  .start.near::before{animation-duration:1.1s}
+  .start.go::before{animation:ring .8s var(--ease-out-quart) 1}
+}
+@keyframes ring{0%{opacity:.75;transform:scale(1)}70%{opacity:0;transform:scale(1.55)}100%{opacity:0;transform:scale(1.55)}}
+.cta-text{font-family:var(--display);font-weight:700;font-size:1.05rem;color:var(--ink)}
+.cta-text small{display:block;font-weight:500;color:var(--muted);font-size:.9rem}
+.gauge{position:absolute;right:clamp(16px,3vw,48px);top:clamp(16px,3vw,48px);width:clamp(180px,18vw,260px);z-index:3;pointer-events:none}
+.gauge svg{width:100%;height:auto;display:block}
+/* Ablesung auf dunkler Pille (Benjamin 03.11.: über der hellen Lampe sonst unlesbar); Weiß auf der Pille ≥ 10:1, Orange ≥ 4:1 auch über reinem Weiß */
+.read{display:inline-flex;align-items:baseline;gap:8px;margin-top:-2px;padding:7px 14px;border-radius:999px;background:rgba(14,12,12,.86);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  font-family:var(--display);font-variant-numeric:tabular-nums;color:var(--ink);white-space:nowrap;text-shadow:0 1px 2px rgba(0,0,0,.6)}
+.read b{font-weight:800;font-size:clamp(1.5rem,2.4vw,2.2rem);line-height:1;color:var(--ember);min-width:2.2em}
+.read small{font-weight:600;font-size:.72rem;color:var(--ink);letter-spacing:.02em}
+
+/* ---- Szene 2 · Manifest (wie Elektriker-Film: Haarlinie, großes erstes Wort, Satz färbt sich beim Scrollen) */
+.two{border-top:1px solid var(--red);padding-top:clamp(56px,9vh,110px);padding-bottom:clamp(72px,12vh,140px)}
+.two p{grid-column:1/8;margin:0;font-size:clamp(1.35rem,2.1vw,1.9rem);line-height:1.35;color:var(--ink)}
+.two p::first-letter{font-family:var(--display);font-weight:800;font-size:2.6em;line-height:.8;float:left;margin:.06em .08em 0 0}
+.two .w{display:inline-block;will-change:opacity}
+.two b{font-weight:500;color:var(--ember)}
+
+/* ---- Szene 3 · Der Film (1:1 Elektriker-Film: Vorhang von rechts, Bühne sticky, Clips spulen mit dem Scroll) */
+.film{position:relative;height:calc(100vh + var(--pin,400vh));background:var(--night)}
+.sticky{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:var(--night);color:#f4f2ee}
+.stage{position:absolute;inset:0;will-change:transform}
+@media (max-width:860px){.film{--pin:260vh}}
+.clip{position:absolute;inset:0;opacity:0}
+.clip video,.clip img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 45%}
+.clip.on{opacity:1}
+.caps{position:absolute;left:var(--pad);right:var(--pad);bottom:clamp(36px,8vh,88px);z-index:5;pointer-events:none}
+.cap{position:absolute;left:0;bottom:0;max-width:18.5em;opacity:0;transform:translateY(12px);transition:opacity 320ms var(--ease-out-quart),transform 320ms var(--ease-out-quart)}
+.cap.on{opacity:1;transform:none}
+.cap b{display:block;font-family:var(--display);font-weight:800;font-size:clamp(1.7rem,3.4vw,3.2rem);line-height:1;letter-spacing:-.015em;text-wrap:balance}
+.cap span{display:block;margin-top:12px;font-size:1.05rem;color:#dfe3e8;max-width:16.92em}
+.shade{position:absolute;inset:auto 0 0 0;height:52%;background:linear-gradient(0deg,rgba(14,12,12,.72),rgba(0,0,0,0));pointer-events:none}
+.film-static{display:none;background:var(--night);color:#f4f2ee;padding:clamp(40px,6vh,72px) 0}
+.film-static figure{margin:0 0 clamp(28px,4vh,48px);display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:clamp(16px,2.4vw,32px);align-items:end}
+.film-static img{grid-column:1/9;width:100%;aspect-ratio:16/9;object-fit:cover}
+.film-static figcaption{grid-column:9/13;font-size:1rem;color:#dfe3e8} .film-static figcaption b{display:block;font-family:var(--display);font-weight:800;font-size:1.4rem;line-height:1.05;color:#fff;margin-bottom:8px}
+.no-js .film,.reduce .film{display:none} .no-js .film-static,.reduce .film-static{display:block}
+
+/* ---- Szene 3b · Leistungsregler: ein Griff, links Serie, rechts Stage 1; das Auto blendet über, PS und Nm zählen hoch, Flammen am Ende */
+.regler{padding-top:clamp(72px,11vh,130px);padding-bottom:clamp(72px,11vh,130px)}
+.regler .head{grid-column:1/13;display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:16px 40px;margin-bottom:clamp(22px,3vh,36px)}
+.regler .head p{margin:0;max-width:22em;color:var(--muted);font-size:1.05rem}
+.reg{grid-column:1/13;position:relative;aspect-ratio:21/9;overflow:hidden;background:var(--panel)} /* 21:9: Bild, Griff und Zähler passen zusammen auf einen Bildschirm */
+.reg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 62%;transform:scaleX(-1)} /* wie der Hero gespiegelt: erkennbar dasselbe Auto */
+.reg .stage1,.reg .flames2{opacity:0}
+.track{grid-column:1/13;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:18px;margin-top:22px;--p:0%}
+.track b{font-family:var(--display);font-weight:800;font-size:clamp(1rem,1.5vw,1.3rem);letter-spacing:.01em;color:var(--muted)}
+.track b.r{color:var(--ember);text-align:right}
+.track input{-webkit-appearance:none;appearance:none;width:100%;height:10px;margin:0;border-radius:5px;background:linear-gradient(90deg,var(--red) var(--p),var(--chrome) var(--p));cursor:ew-resize;touch-action:pan-y}
+.track input::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:46px;height:46px;border-radius:50%;background:var(--red);border:4px solid var(--ink);box-shadow:0 0 22px rgba(217,49,28,.6);cursor:ew-resize}
+.track input::-moz-range-thumb{width:46px;height:46px;border-radius:50%;background:var(--red);border:4px solid var(--ink);box-shadow:0 0 22px rgba(217,49,28,.6);cursor:ew-resize}
+.track input:focus-visible{outline:2px solid var(--ember);outline-offset:8px}
+.cnt{grid-column:1/13;display:flex;flex-wrap:wrap;align-items:baseline;gap:clamp(20px,4vw,56px);margin-top:18px;font-family:var(--display);font-variant-numeric:tabular-nums}
+.cnt b{font-weight:800;font-size:clamp(2.2rem,4.4vw,3.8rem);line-height:1;letter-spacing:-.02em;color:var(--ember)}
+.cnt span{font-weight:600;font-size:.95rem;color:var(--muted);margin-left:8px}
+.regler .fine{grid-column:1/13;margin:12px 0 0;color:var(--muted);font-size:.95rem}
+
+/* ---- Szene 4 · Index (wie Elektriker-Film: Randnotiz + Zeilen mit Haarlinie), darunter die Bewertungen */
+.index{padding-top:clamp(80px,12vh,150px);padding-bottom:clamp(80px,12vh,150px);border-top:1px solid var(--line)}
+.index .note{grid-column:1/5;align-self:start;position:sticky;top:clamp(24px,6vh,64px)}
+.index .note p{margin:22px 0 0;max-width:12.22em;color:var(--muted);font-size:1.05rem}
+.index .note p::before{content:"";display:block;width:56px;height:1px;background:var(--red);margin-bottom:18px}
+.index .note p b{color:var(--ember);font-weight:500}
+.index ol{grid-column:5/13;list-style:none;margin:0;padding:0}
+.row{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(14px,3vw,48px);padding:clamp(22px,2.6vw,34px) 0 clamp(22px,2.6vw,34px)}
+.row .rule{position:absolute;left:0;right:0;top:0;height:1px;background:var(--line);transform-origin:left center}
+.row b{font-family:var(--display);font-weight:700;font-size:clamp(1.3rem,2.2vw,2rem);line-height:1.08;letter-spacing:-.01em}
+.row span{color:var(--muted);font-size:1.05rem}
+.row:last-child::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--line)}
+.quotes{grid-column:5/13;margin:clamp(40px,6vh,72px) 0 0;padding:0;list-style:none}
+.quotes .score{display:flex;align-items:baseline;gap:14px;font-family:var(--display);padding-bottom:18px}
+.quotes .score b{font-weight:800;font-size:clamp(2.4rem,4.4vw,3.8rem);line-height:1;letter-spacing:-.03em}
+.quotes .score i{font-style:normal;color:var(--ember);letter-spacing:.08em;font-size:1.2rem}
+.quotes .score span{color:var(--muted);font-size:.95rem} .quotes .score a{color:var(--ink)}
+.quotes li{padding:clamp(18px,2vw,26px) 0;border-top:1px solid var(--line)}
+.quotes li:last-child{border-bottom:1px solid var(--line)}
+.quotes blockquote{margin:0;font-size:clamp(1.1rem,1.5vw,1.35rem);line-height:1.4;font-style:italic;max-width:26em}
+.quotes cite{display:block;margin-top:8px;font-style:normal;font-family:var(--display);font-size:.88rem;color:var(--muted)}
+
+/* ---- Szene 5 · Anfrage + Kontakt (wie Elektriker-Film: Vollfläche Akzent, hier Tiefrot, Warmweiß darauf 5,7:1) */
+.door{background:var(--red-deep);color:var(--ink);padding-top:clamp(80px,12vh,150px);padding-bottom:clamp(56px,8vh,96px)}
+.door .lead{grid-column:1/6} .door .lead p{max-width:15.98em;font-size:1.15rem;margin:22px 0 0}
+.door form{grid-column:6/13;display:grid;gap:22px}
+.f{display:grid;gap:8px} .f small{font-family:var(--display);font-weight:700;font-size:.85rem}
+.chips{display:flex;flex-wrap:wrap;gap:8px} .chips label{cursor:pointer} .chips input{position:absolute;opacity:0;width:1px;height:1px}
+.chips span{display:inline-block;padding:9px 14px;border:1.5px solid var(--ink);border-radius:3px;font-family:var(--display);font-size:.95rem;transition:background-color 120ms var(--ease-out-quart),color 120ms var(--ease-out-quart)}
+.chips input:checked+span{background:var(--ink);color:var(--red-deep)} .chips input:focus-visible+span{outline:2px solid var(--ink);outline-offset:3px}
+.f input,.f textarea{font:inherit;font-family:var(--text);font-size:1.08rem;color:var(--ink);background:transparent;border:0;border-bottom:1.5px solid var(--ink);padding:8px 0;border-radius:0}
+.f input::placeholder,.f textarea::placeholder{color:var(--ink);font-style:italic;opacity:1}
+.f input:focus,.f textarea:focus{outline:none;border-bottom-width:3px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.photos{display:flex;align-items:center;gap:12px;font-family:var(--display);font-size:.95rem;cursor:pointer}
+.photos input{position:absolute;opacity:0;width:1px;height:1px} .photos b{border:1.5px solid var(--ink);padding:8px 14px;border-radius:3px;font-weight:700}
+.btn-ink{background:var(--bg);color:var(--ink);justify-self:start}
+.contact{grid-column:1/13;display:grid;grid-template-columns:1.3fr .9fr .9fr;gap:clamp(24px,4vw,64px);margin-top:clamp(56px,8vh,96px);border-top:1px solid var(--ink);padding-top:28px}
+.contact h3{font-family:var(--display);font-size:.85rem;font-weight:700;margin:0 0 10px}
+.contact p{margin:0;font-size:1.1rem} .tel{font-family:var(--display);font-weight:800;font-size:clamp(1.9rem,3.2vw,3rem);line-height:1;text-decoration:none;display:block;white-space:nowrap}
+.foot{grid-column:1/13;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-family:var(--display);font-size:.9rem;margin-top:48px}
+
+@media (max-width:860px){
+  .hero{padding-bottom:104px} .hero .base,.hero .flames{object-position:34% 50%} /* Handy-Ausschnitt: Heck mit Rücklichtern und Auspuff (Flammen) im Bild; unten Platz für die Leiste */
+  .sub{display:none} .sub-short{display:block;font-size:1.02rem}
+  .firm{max-width:calc(100% - 31vw - 20px)} /* Kopfzeile bleibt links neben der Tacho-Spalte */
+  .hero .copy{padding-top:calc(31vw * .8 + 56px)} /* Sicherheitsnetz für kurze Displays: Text beginnt immer unter Tacho und Ablesung */
+  .cta{gap:16px} .start{width:150px;height:150px;padding:5px} .start .bezel{padding:9px} .start b{font-size:1.3rem;letter-spacing:.03em} .start small{font-size:.8rem;letter-spacing:.18em} .start::after{inset:-80px}
+  .gauge{width:31vw;right:12px;top:8px} .gauge .read{position:absolute;right:0;top:calc(100% - 8px)} .read b{font-size:1.3rem} /* Pille hängt an der rechten Kante, wächst nach links über das Foto, endet über der Überschrift */
+  .two p{grid-column:1/13}
+  .reg{margin:0 calc(-1*var(--pad))} .track{gap:12px} .cnt b{font-size:2.2rem}
+  .index .note{grid-column:1/13;position:static} .index ol,.quotes{grid-column:1/13} .index ol{margin-top:40px}
+  .row{grid-template-columns:1fr;gap:6px}
+  .door .lead,.door form{grid-column:1/13} .door form{margin-top:40px} .two-col{grid-template-columns:1fr}
+  .door{padding-bottom:calc(56px + 84px)} /* Platz für die feste Leiste */
+  .contact{grid-template-columns:1fr}
+  .film-static img,.film-static figcaption{grid-column:1/13}
+  .cap b{font-size:clamp(1.6rem,7vw,2.4rem)}
+}
+/* Effekt-Fläche über der Seite: Lichtspuren zum Startknopf, Funken beim Flammenstoß, im Aufnahmemodus Zeiger und Fahrtstreifen */
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50;display:none}
+.fx-on #fx{display:block}
+@media (prefers-reduced-motion:reduce){ .btn,.chips span,.cap,.start{transition:none} }
+</style>
+</head>
+<body>
+
+<canvas id="fx" aria-hidden="true"></canvas>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="wa-glyph" viewBox="0 0 24 24"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.885-9.885 9.885m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></symbol></svg>
+<section class="hero" id="top">
+  <div class="shot" aria-hidden="false"><!-- gespiegelt (Benjamin 03.11.: Fahreffekt), Tacho/Text/Spuren liegen außerhalb und bleiben richtig herum -->
+  <img class="base" src="assets/k_hero_car_a-1200.webp" srcset="assets/k_hero_car_a-800.webp 800w, assets/k_hero_car_a-1200.webp 1200w, assets/k_hero_car_a-1800.webp 1800w, assets/k_hero_car_a-2400.webp 2400w" sizes="100vw" alt="Tiefergelegtes Coupé mit Widebody in einer Nachtwerkstatt, rotes LED-Band und Arbeitslampe spiegeln sich auf dem nassen Boden" width="2400" height="1339" fetchpriority="high" decoding="async">
+  <img class="flames" src="assets/k_hero_flames-1200.webp" srcset="assets/k_hero_flames-800.webp 800w, assets/k_hero_flames-1200.webp 1200w, assets/k_hero_flames-1800.webp 1800w, assets/k_hero_flames-2400.webp 2400w" sizes="100vw" alt="" width="2400" height="1339" fetchpriority="low" decoding="async" aria-hidden="true">
+  </div>
+  <div class="gauge" aria-hidden="true">
+    <svg viewBox="0 0 240 190" role="img" aria-label="Drehzahlmesser">
+      <defs><radialGradient id="glow" cx="50%" cy="60%" r="55%"><stop offset="0" stop-color="#f37443" stop-opacity=".42"/><stop offset=".55" stop-color="#d9311c" stop-opacity=".16"/><stop offset="1" stop-color="#0e0c0c" stop-opacity="0"/></radialGradient></defs>
+      <circle cx="120" cy="112" r="108" fill="url(#glow)"/>
+      <circle cx="120" cy="112" r="96" fill="#1a1817" fill-opacity=".92" stroke="#525059" stroke-width="1.5"/>
+      <path d="M 204.5 89.4 A 87.5 87.5 0 0 1 195.8 155.7" fill="none" stroke="#d9311c" stroke-width="9" stroke-linecap="butt"/>
+      <line x1="40.3" y1="158.0" x2="52.5" y2="151.0" stroke="#f4eee5" stroke-width="2.4"/>
+      <line x1="31.1" y1="135.8" x2="37.9" y2="134.0" stroke="#525059" stroke-width="1.2"/>
+      <line x1="28.0" y1="112.0" x2="42.0" y2="112.0" stroke="#f4eee5" stroke-width="2.4"/>
+      <line x1="31.1" y1="88.2" x2="37.9" y2="90.0" stroke="#525059" stroke-width="1.2"/>
+      <line x1="40.3" y1="66.0" x2="52.5" y2="73.0" stroke="#f4eee5" stroke-width="2.4"/>
+      <line x1="54.9" y1="46.9" x2="59.9" y2="51.9" stroke="#525059" stroke-width="1.2"/>
+      <line x1="74.0" y1="32.3" x2="81.0" y2="44.5" stroke="#f4eee5" stroke-width="2.4"/>
+      <line x1="96.2" y1="23.1" x2="98.0" y2="29.9" stroke="#525059" stroke-width="1.2"/>
+      <line x1="120.0" y1="20.0" x2="120.0" y2="34.0" stroke="#f4eee5" stroke-width="2.4"/>
+      <line x1="143.8" y1="23.1" x2="142.0" y2="29.9" stroke="#525059" stroke-width="1.2"/>
+      <line x1="166.0" y1="32.3" x2="159.0" y2="44.5" stroke="#f4eee5" stroke-width="2.4"/>
+      <line x1="185.1" y1="46.9" x2="180.1" y2="51.9" stroke="#525059" stroke-width="1.2"/>
+      <line x1="199.7" y1="66.0" x2="187.5" y2="73.0" stroke="#f4eee5" stroke-width="2.4"/>
+      <line x1="208.9" y1="88.2" x2="202.1" y2="90.0" stroke="#525059" stroke-width="1.2"/>
+      <line x1="212.0" y1="112.0" x2="198.0" y2="112.0" stroke="#f4eee5" stroke-width="2.4"/>
+      <line x1="208.9" y1="135.8" x2="202.1" y2="134.0" stroke="#525059" stroke-width="1.2"/>
+      <line x1="199.7" y1="158.0" x2="187.5" y2="151.0" stroke="#f4eee5" stroke-width="2.4"/>
+      <text x="66.3" y="143.0" fill="#f4eee5" font-family="Schibsted Grotesk,system-ui,sans-serif" font-weight="700" font-size="13" text-anchor="middle" dominant-baseline="middle">0</text>
+      <text x="58.0" y="112.0" fill="#f4eee5" font-family="Schibsted Grotesk,system-ui,sans-serif" font-weight="700" font-size="13" text-anchor="middle" dominant-baseline="middle">1</text>
+      <text x="66.3" y="81.0" fill="#f4eee5" font-family="Schibsted Grotesk,system-ui,sans-serif" font-weight="700" font-size="13" text-anchor="middle" dominant-baseline="middle">2</text>
+      <text x="89.0" y="58.3" fill="#f4eee5" font-family="Schibsted Grotesk,system-ui,sans-serif" font-weight="700" font-size="13" text-anchor="middle" dominant-baseline="middle">3</text>
+      <text x="120.0" y="50.0" fill="#f4eee5" font-family="Schibsted Grotesk,system-ui,sans-serif" font-weight="700" font-size="13" text-anchor="middle" dominant-baseline="middle">4</text>
+      <text x="151.0" y="58.3" fill="#f4eee5" font-family="Schibsted Grotesk,system-ui,sans-serif" font-weight="700" font-size="13" text-anchor="middle" dominant-baseline="middle">5</text>
+      <text x="173.7" y="81.0" fill="#f4eee5" font-family="Schibsted Grotesk,system-ui,sans-serif" font-weight="700" font-size="13" text-anchor="middle" dominant-baseline="middle">6</text>
+      <text x="182.0" y="112.0" fill="#f4eee5" font-family="Schibsted Grotesk,system-ui,sans-serif" font-weight="700" font-size="13" text-anchor="middle" dominant-baseline="middle">7</text>
+      <text x="173.7" y="143.0" fill="#f4eee5" font-family="Schibsted Grotesk,system-ui,sans-serif" font-weight="700" font-size="13" text-anchor="middle" dominant-baseline="middle">8</text>
+      <text x="120" y="150" fill="#a39b96" font-family="Schibsted Grotesk,system-ui,sans-serif" font-weight="600" font-size="9.5" text-anchor="middle" letter-spacing=".5">1/min × 1000</text>
+      <g id="needle" transform="rotate(-93.0 120 112)"><polygon points="117,118 120,22 123,118" fill="#f37443"/><polygon points="118.6,60 120,22 121.4,60" fill="#d9311c"/></g>
+      <circle cx="120" cy="112" r="9" fill="#525059" stroke="#f4eee5" stroke-width="1.5"/>
+    </svg>
+    <div class="read"><b id="ps">150</b><small>PS · Beispielwert</small></div>
+  </div>
+  <div class="copy wrap">
+    <p class="firm"><b>SiRAC ELEKTRONiK</b> · Braunschweig · <i>Chiptuning for more horsepower</i></p>
+    <h1><span class="ln"><span>Mehr Leistung.</span></span><span class="ln"><span><em>Fehler raus.</em></span></span></h1>
+    <p class="sub">Chiptuning und Software-Optimierung, Fehlerdiagnose, Steuergeräte und Schlüssel: Kfz-Elektronik in Braunschweig. Per WhatsApp anfragen, Fahrzeug kurz beschreiben, werktags Rückmeldung.</p>
+    <p class="sub sub-short">Chiptuning, Diagnose, Steuergeräte, Schlüssel: Kfz-Elektronik in Braunschweig. Anfrage per WhatsApp, Rückmeldung werktags.</p><!-- Handy: kürzer, damit der Text unter Tacho und Ablesung beginnt -->
+
+    <div class="cta">
+      <a class="start" id="start" href="#anfrage" aria-label="Anfrage in 60 Sekunden"><span class="bezel"><span class="kappe"><b>ANFRAGE</b><small>START</small></span></span></a>
+      <span class="cta-text">Anfrage in 60 Sekunden<small>Per WhatsApp, gern mit Foto</small></span>
+      <a class="btn btn-wa btn-wa-line" href="https://wa.me/491631530455?text=Hallo%2C%20ich%20habe%20eine%20Anfrage%20zu%20meinem%20Auto." target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#wa-glyph"/></svg>0163 153 0455</a>
+    </div>
+  </div>
+</section>
+
+<section class="two wrap grid">
+  <p id="manifest">Wir sind eine Werkstatt aus Braunschweig, die <b>erst liest und dann schreibt</b>: Steuergeräte auslesen, Fehler finden, Software auf dein Fahrzeug abstimmen. Für alle Fabrikate, vom Alltagsauto bis zum Exoten. <b>Erst die Diagnose, dann die Leistung.</b></p>
+</section>
+
+<section class="film" id="film" aria-label="Der Weg von der Halle bis auf die Straße">
+  <div class="sticky"><div class="stage" id="stage">
+    <div class="clip" data-leg="l1_rein"><img src="assets/l1_rein-poster.webp" alt="" loading="lazy" decoding="async"></div>
+    <div class="clip" data-leg="l2_cluster"><img src="assets/l2_cluster-poster.webp" alt="" loading="lazy" decoding="async"></div>
+    <div class="clip" data-leg="l3_rev"><img src="assets/l3_rev-poster.webp" alt="" loading="lazy" decoding="async"></div>
+    <div class="clip" data-leg="l4_raus"><img src="assets/l4_raus-poster.webp" alt="" loading="lazy" decoding="async"></div>
+    <div class="shade"></div>
+    <div class="caps">
+      <div class="cap"><b>Nachts in der Halle.</b><span>Dein Auto, unser Laptop. Erst lesen, was die Steuergeräte sagen.</span></div>
+      <div class="cap"><b>Erst lesen, dann schreiben.</b><span>Diagnose vor der Software: Fehler raus, dann die Abstimmung auf dein Fahrzeug.</span></div>
+      <div class="cap"><b>Die Nadel sagt, ob es passt.</b><span>Nach dem Aufspielen: Drehzahl hoch, Ansprechverhalten prüfen, protokollieren.</span></div>
+      <div class="cap"><b>Raus auf die Straße.</b><span>Mit mehr Druck und ohne Warnlampe. Anfrage in einer Minute, Rückmeldung werktags.</span></div>
+      </div>
+  </div></div>
+</section>
+<section class="film-static wrap" aria-label="Der Weg von der Halle bis auf die Straße, als Bildfolge">
+  <figure><img loading="lazy" decoding="async" src="assets/l1_rein-poster.webp" alt="Offene Fahrertür, Laptop auf dem Sitz, Kabel zur Diagnosebuchse"><figcaption><b>Nachts in der Halle.</b>Dein Auto, unser Laptop. Erst lesen, was die Steuergeräte sagen.</figcaption></figure>
+  <figure><img loading="lazy" decoding="async" src="assets/l2_cluster-poster.webp" alt="Blick über das Armaturenbrett auf den Drehzahlmesser"><figcaption><b>Erst lesen, dann schreiben.</b>Diagnose vor der Software: Fehler raus, dann die Abstimmung auf dein Fahrzeug.</figcaption></figure>
+  <figure><img loading="lazy" decoding="async" src="assets/l3_rev-poster.webp" alt="Drehzahlmesser, die Nadel wandert in den roten Bereich"><figcaption><b>Die Nadel sagt, ob es passt.</b>Nach dem Aufspielen: Drehzahl hoch, Ansprechverhalten prüfen, protokollieren.</figcaption></figure>
+  <figure><img loading="lazy" decoding="async" src="assets/l4_raus-poster.webp" alt="Das Auto fährt nachts die nasse Straße hinunter, Rücklichter ziehen rote Spuren"><figcaption><b>Raus auf die Straße.</b>Mit mehr Druck und ohne Warnlampe. Anfrage in einer Minute, Rückmeldung werktags.</figcaption></figure>
+  </section>
+
+<section class="regler wrap grid" id="leistungsregler">
+  <div class="head"><h2>Serie oder Stage 1?</h2><p>Zieh den Regler nach rechts. Dasselbe Auto, mehr Leistung.</p></div>
+  <div class="reg" id="reg">
+    <img class="serie" src="assets/k_serie-1200.webp" srcset="assets/k_serie-800.webp 800w, assets/k_serie-1200.webp 1200w, assets/k_serie-1800.webp 1800w, assets/k_serie-2400.webp 2400w" sizes="(max-width:860px) 100vw, 1320px" alt="Dasselbe Coupé in Serienausführung: normale Höhe, schmale Räder" loading="lazy" decoding="async" width="2400" height="1339">
+    <img class="stage1" src="assets/k_hero_car_a-1200.webp" srcset="assets/k_hero_car_a-800.webp 800w, assets/k_hero_car_a-1200.webp 1200w, assets/k_hero_car_a-1800.webp 1800w, assets/k_hero_car_a-2400.webp 2400w" sizes="(max-width:860px) 100vw, 1320px" alt="Dasselbe Coupé als Stage 1: tiefergelegt, breite Kotflügel" loading="lazy" decoding="async" width="2400" height="1339">
+    <img class="flames2" src="assets/k_hero_flames-1200.webp" srcset="assets/k_hero_flames-800.webp 800w, assets/k_hero_flames-1200.webp 1200w, assets/k_hero_flames-1800.webp 1800w, assets/k_hero_flames-2400.webp 2400w" sizes="(max-width:860px) 100vw, 1320px" alt="" loading="lazy" decoding="async" width="2400" height="1339" aria-hidden="true">
+  </div>
+  <div class="track" id="track"><b>Serie</b><input type="range" id="reg-range" min="0" max="100" value="0" aria-label="Leistungsregler: links Serie, rechts Stage 1"><b class="r">Stage 1</b></div>
+  <div class="cnt"><div><b id="ps2">150</b><span>PS</span></div><div><b id="nm">320</b><span>Nm</span></div></div>
+  <p class="fine">Beispielwerte, je nach Fahrzeug. Was bei deinem möglich ist, sagen wir dir nach der Diagnose.</p>
+</section>
+
+<section class="index wrap grid" id="leistungen">
+  <div class="note"><h2>Was wir machen.</h2><p><b>Chiptuning for more horsepower.</b> Erst die Diagnose, dann die Arbeit. Alles andere auf Anfrage.</p></div>
+  <ol>
+    <li class="row"><i class="rule"></i><b>Chiptuning &amp; Software-Optimierung</b><span>Motorsoftware auf dein Fahrzeug abgestimmt: mehr Leistung, sauberes Ansprechverhalten. Für alle Fabrikate.</span></li>
+    <li class="row"><i class="rule"></i><b>Fehleranalyse &amp; Diagnostik</b><span>Fehler auslesen und finden, auch wenn andere Werkstätten nicht weiterkommen. Mit modernem Diagnosegerät.</span></li>
+    <li class="row"><i class="rule"></i><b>Org.-km-Check aller Fabrikate</b><span>Kilometerstand aus den Steuergeräten prüfen, bevor du kaufst oder verkaufst.</span></li>
+    <li class="row"><i class="rule"></i><b>DPF- &amp; V-max-Service</b><span>Partikelfilter-Service und V-max-Anpassung, fachgerecht und dokumentiert.</span></li>
+    <li class="row"><i class="rule"></i><b>Steuergeräte-Reparatur</b><span>Diagnose und Reparatur von Steuergeräten und Bordelektronik, quer durch alle Systeme.</span></li>
+    <li class="row"><i class="rule"></i><b>WfS- &amp; Kfz-Schlüssel-Service</b><span>Wegfahrsperre anlernen, Ersatzschlüssel anfertigen und programmieren, Zündschloss tauschen.</span></li>
+    </ol>
+  <ul class="quotes" id="bewertungen">
+    <li class="score"><b>4,8</b><i aria-label="4,8 von 5 Sternen">★★★★★</i><span>19 Google-Bewertungen · <a href="https://www.google.com/maps/search/?api=1&amp;query=SiRAC%20ELEKTRONiK&amp;query_place_id=ChIJeROcQSn3r0cRL2MeKCOrL-s" target="_blank" rel="noopener">Bei Google lesen</a></span></li>
+    <li><blockquote>„Sehr zuverlässig, pünktlich und fachgerechte Arbeit. Klare Empfehlung.“</blockquote><cite>Google-Bewertung</cite></li>
+    <li><blockquote>„Hat bei meinem Mercedes den Elektronikfehler lokalisiert, den andere Werkstätten nicht finden konnten.“</blockquote><cite>Google-Bewertung</cite></li>
+    </ul>
+</section>
+
+<section class="door" id="anfrage"><div class="wrap grid">
+  <div class="lead"><h2>Kurz beschreiben, worum es geht.</h2><p>Mit ein paar Angaben und einem Foto können wir sofort einschätzen, ob und wann wir helfen können. Rückmeldung werktags.</p></div>
+  <form id="anfrage-form">
+    <div class="f"><small>Worum geht es?</small><div class="chips">
+      <label><input type="radio" name="art" value="Chiptuning / Software" checked><span>Chiptuning / Software</span></label><label><input type="radio" name="art" value="Fehler / Diagnose"><span>Fehler / Diagnose</span></label><label><input type="radio" name="art" value="Schlüssel / Wegfahrsperre"><span>Schlüssel / Wegfahrsperre</span></label><label><input type="radio" name="art" value="Steuergerät"><span>Steuergerät</span></label><label><input type="radio" name="art" value="DPF / V-max"><span>DPF / V-max</span></label><label><input type="radio" name="art" value="Sonstiges"><span>Sonstiges</span></label></div></div>
+    <div class="f"><small>Wie dringend?</small><div class="chips">
+      <label><input type="radio" name="wann" value="So bald wie möglich"><span>So bald wie möglich</span></label><label><input type="radio" name="wann" value="In den nächsten Tagen" checked><span>In den nächsten Tagen</span></label><label><input type="radio" name="wann" value="In den nächsten Wochen"><span>In den nächsten Wochen</span></label><label><input type="radio" name="wann" value="Nur Anfrage"><span>Nur Anfrage</span></label></div></div>
+    <div class="two-col"><label class="f"><small>Fahrzeug</small><input name="auto" placeholder="z. B. Golf 7 GTI, Baujahr 2017"></label><label class="f"><small>Telefon oder E-Mail</small><input name="kontakt" placeholder="Für die Rückmeldung"></label></div>
+    <label class="f"><small>Kurz beschreiben</small><textarea name="text" rows="3" placeholder="z. B. Chiptuning, Warnlampe leuchtet, Schlüssel verloren"></textarea></label>
+    <label class="photos"><input type="file" multiple accept="image/*" onchange="this.nextElementSibling.nextElementSibling.textContent=this.files.length?this.files.length+' ausgewählt':'Keine Fotos ausgewählt'"><b>Fotos auswählen</b><span>Keine Fotos ausgewählt</span></label>
+    <button class="btn btn-wa" type="submit"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.885-9.885 9.885m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg><span class="lbl">Anfrage per WhatsApp senden</span></button>
+  </form>
+  <div class="contact">
+    <div><h3>Telefon</h3><a class="tel" href="tel:+491631530455">0163 153 0455</a><p style="margin-top:10px">Mo–So ab 07:00 Uhr erreichbar</p></div>
+    <div><h3>WhatsApp</h3><p>0163 153 0455<br>gern mit Fotos</p></div>
+    <div><h3>Werkstatt</h3><p>Broitzemer Str. 202/Halle 40, 38118 Braunschweig<br><a href="https://www.google.com/maps/search/?api=1&amp;query=SiRAC%20ELEKTRONiK&amp;query_place_id=ChIJeROcQSn3r0cRL2MeKCOrL-s" target="_blank" rel="noopener">In Google Maps öffnen</a></p></div>
+  </div>
+  <div class="foot"><span>© 2026 SiRAC ELEKTRONiK · Braunschweig und Umgebung</span><span><a href="#">Impressum</a> · <a href="#">Datenschutz</a></span></div>
+</div></section>
+
+<div class="bar" id="bar"><!-- Handy: feste Leiste unten, nur der WhatsApp-Knopf ist grün (öffnet wirklich WhatsApp) -->
+  <a class="btn btn-line" href="tel:+491631530455">Anrufen</a>
+  <a class="btn btn-wa" href="https://wa.me/491631530455?text=Hallo%2C%20ich%20habe%20eine%20Anfrage%20zu%20meinem%20Auto." target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#wa-glyph"/></svg>0163 153 0455</a>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" defer fetchpriority="low"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js" defer fetchpriority="low"></script>
+<script src="https://unpkg.com/lenis@1.3.27/dist/lenis.min.js" defer fetchpriority="low"></script>
+<script>
+window.addEventListener('DOMContentLoaded', function () {
+  var html = document.documentElement; html.classList.remove('no-js');
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var REC = /[?&]rec=1/.test(location.search); // Aufnahmemodus (scripts/tuning_film.py): Zeit kommt von außen, kein Lenis
+  var WA = "+491631530455";
+  // Anfrage: baut die WhatsApp-Nachricht aus den Feldern und öffnet den Chat
+  var form = document.getElementById('anfrage-form');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var g = function (n) { var el = form.querySelector('[name="' + n + '"]:checked, [name="' + n + '"]'); return el ? el.value.trim() : ''; };
+    var msg = 'Hallo, Anfrage über die Website:\n' + g('art') + ' · ' + g('wann') + (g('auto') ? '\nFahrzeug: ' + g('auto') : '') + (g('text') ? '\n' + g('text') : '') + (g('kontakt') ? '\nRückmeldung an: ' + g('kontakt') : '');
+    form.querySelector('.btn-wa .lbl').textContent = "WhatsApp \u00f6ffnet sich, danke!";
+    window.open('https://wa.me/' + WA.replace('+', '') + '?text=' + encodeURIComponent(msg), '_blank', 'noopener');
+  });
+  // Leistungsregler: rechts = mehr Leistung. Serie → Stage 1 blendet über, PS/Nm zählen mit, Flammen in den letzten 20 %.
+  var track = document.getElementById('track'), range = document.getElementById('reg-range'), reg = document.getElementById('reg');
+  var stage1 = reg.querySelector('.stage1'), flames2 = reg.querySelector('.flames2'), ps2 = document.getElementById('ps2'), nm = document.getElementById('nm');
+  var R0 = 150, R1 = 210, N0 = 320, N1 = 420;
+  function setReg(p) {
+    p = Math.max(0, Math.min(100, p)); track.style.setProperty('--p', p + '%');
+    stage1.style.opacity = (p / 100).toFixed(3); flames2.style.opacity = Math.max(0, (p - 80) / 20).toFixed(3);
+    ps2.textContent = Math.round(R0 + (R1 - R0) * p / 100); nm.textContent = Math.round(N0 + (N1 - N0) * p / 100);
+    if (+range.value !== Math.round(p)) range.value = Math.round(p);
+  }
+  range.addEventListener('input', function () { setReg(+range.value); });
+  setReg(0);
+  if (REC) window.__recRegler = setReg;
+  if (reduce || !window.gsap || !window.ScrollTrigger) { html.classList.add('reduce'); return; } // reduzierte Bewegung: Bildband, Text steht, Regler bleibt bedienbar
+  gsap.registerPlugin(ScrollTrigger);
+
+  // 1. Fundament: Lenis treibt ScrollTrigger, ein Ticker.
+  var lenis = (window.Lenis && !REC) ? new Lenis() : null;
+  if (lenis) { lenis.on('scroll', ScrollTrigger.update); gsap.ticker.add(function (t) { lenis.raf(t * 1000); }); gsap.ticker.lagSmoothing(0); }
+  function goTo(id) { lenis ? lenis.scrollTo(id, { lock: true, duration: 1.2 }) : document.querySelector(id).scrollIntoView(); }
+  document.querySelectorAll('a[href^="#"]').forEach(function (a) { if (a.id === 'start') return; a.addEventListener('click', function (e) {
+    var id = a.getAttribute('href'); if (id.length < 2 || !document.querySelector(id)) return; e.preventDefault(); goTo(id);
+  }); });
+
+  // 2. Hero: Zeilen aus der Maske (einmalig); das Vollbild zoomt mit dem Scroll langsam hinein (Benjamin: "Zoom-in beim Runterscrollen").
+  var heroEl = document.getElementById('top'), base = heroEl.querySelector('.base'), flames = heroEl.querySelector('.flames');
+  gsap.from('.hero .ln > span', { yPercent: 110, duration: .7, ease: 'expo.out', stagger: .06, delay: .05 });
+  gsap.set([base, flames], { scale: 1, transformOrigin: '50% 55%' });
+  gsap.to([base, flames], { scale: 1.14, ease: 'none', scrollTrigger: { trigger: heroEl, start: 'top top', end: 'bottom top', scrub: true } });
+  var needle = document.getElementById('needle'), IDLE = -93.0, REDLINE = 102.0, MIN = -120.0;
+  var ps = document.getElementById('ps'), PS = { v: 150 }, PS_FROM = 150, PS_TO = 210;
+  gsap.set(needle, { rotation: MIN, svgOrigin: '120 112' });
+  var idle = gsap.timeline({ repeat: -1, yoyo: true, paused: true }).to(needle, { rotation: IDLE + 1.6, duration: .55, ease: 'sine.inOut', svgOrigin: '120 112' });
+  gsap.timeline({ delay: .25 }).to(needle, { rotation: REDLINE + 4, duration: .9, ease: 'power3.out', svgOrigin: '120 112' })
+    .to(needle, { rotation: IDLE, duration: 1.1, ease: 'power2.inOut', svgOrigin: '120 112', onComplete: function () { idle.play(); } });
+
+  // 3. Startknopf: Drehzahl in den roten Bereich, PS hoch, Flammenstoß am Auto (nur auf Zeigen/Berühren, nie dauerhaft).
+  var start = document.getElementById('start'), EX = [[0.231, 0.642], [0.374, 0.642]], TAIL = [[0.265, 0.44], [0.44, 0.435]];
+  var busy = false, sparks = [], kick = function () {};
+  function heroMap(pts) { // Punkte als Bruchteile des Fotos → Bildschirm (object-fit: cover mit object-position, Scroll-Zoom, Spiegelung des Rahmens)
+    var r = heroEl.getBoundingClientRect(), iw = base.naturalWidth || 2400, ih = base.naturalHeight || 1340;
+    var op = (getComputedStyle(base).objectPosition || '50% 55%').split(' ').map(function (v) { return parseFloat(v) / 100; });
+    var fx = isNaN(op[0]) ? .5 : op[0], fy = isNaN(op[1]) ? .55 : op[1];
+    var s = Math.max(r.width / iw, r.height / ih), w = iw * s, h = ih * s, ox = r.left + (r.width - w) * fx, oy = r.top + (r.height - h) * fy;
+    var z = +gsap.getProperty(base, 'scale') || 1, cx = r.left + r.width * fx, cy = r.top + r.height * fy;
+    return pts.map(function (p) { var x = ox + p[0] * w, y = oy + p[1] * h; x = cx + (x - cx) * z; y = cy + (y - cy) * z;
+      return [r.left + r.right - x, y, w * z / 1200]; }); // .shot ist scaleX(-1): x am Rahmen spiegeln; Größenfaktor = dargestellte Breite / 1200 (unabhängig von der geladenen Bildgröße)
+  }
+  // Solange Zeiger/Finger auf dem Knopf liegt (Benjamin 03.11.): Nadel bleibt im roten Bereich, PS oben, Flamme brennt und flackert
+  // (Afterfire), Funken kommen nach; beim Verlassen stirbt die Flamme in 0,4 s, Nadel und PS gehen zurück.
+  var hold = false, holdTl = null, flick = null;
+  var upd = function () { ps.textContent = Math.round(PS.v); };
+  function spit(n) { heroMap(EX).forEach(function (pt) { for (var i = 0; i < n; i++) sparks.push({ x: pt[0], y: pt[1], vx: -(60 + Math.random() * 240) * pt[2], vy: (Math.random() - .55) * 120 * pt[2], r: (1 + Math.random() * 2.2) * Math.max(pt[2], .6), t: 0, life: .35 + Math.random() * .45 }); }); }
+  window.__spit = function () { if (hold) spit(5); }; // aus der Effekt-Schleife alle ~0,3 s, solange gehalten wird
+  function flicker() { if (!hold) return; flick = gsap.to(flames, { opacity: .55 + Math.random() * .45, duration: .07 + Math.random() * .1, ease: 'none', onComplete: flicker }); }
+  function engage() {
+    if (hold) return; hold = true;
+    start.classList.add('go'); setTimeout(function () { start.classList.remove('go'); }, 850);
+    idle.pause(); if (holdTl) { holdTl.kill(); holdTl = null; } if (flick) { flick.kill(); flick = null; }
+    gsap.killTweensOf([needle, flames, PS]);
+    gsap.to(needle, { rotation: REDLINE + 6, duration: .5, ease: 'expo.out', svgOrigin: '120 112', onComplete: function () {
+      if (!hold) return; holdTl = gsap.timeline({ repeat: -1, yoyo: true }).to(needle, { rotation: REDLINE - 3, duration: .22, ease: 'sine.inOut', svgOrigin: '120 112' }); } });
+    gsap.to(PS, { v: PS_TO, duration: .75, ease: 'power2.out', onUpdate: upd });
+    gsap.to(flames, { opacity: 1, duration: .1, ease: 'power1.out', onComplete: flicker });
+    spit(26); kick();
+  }
+  function release() {
+    if (!hold) return; hold = false;
+    if (holdTl) { holdTl.kill(); holdTl = null; } if (flick) { flick.kill(); flick = null; }
+    gsap.killTweensOf([needle, flames, PS]);
+    gsap.to(flames, { opacity: 0, duration: .4, ease: 'power2.in' });
+    gsap.to(needle, { rotation: IDLE, duration: 1.5, ease: 'power2.inOut', svgOrigin: '120 112', onComplete: function () { if (!hold) idle.play(); } });
+    gsap.to(PS, { v: PS_FROM, duration: 1.2, ease: 'power2.inOut', onUpdate: upd });
+  }
+  start.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') engage(); });
+  start.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') release(); });
+  start.addEventListener('pointerdown', function (e) { if (e.pointerType !== 'mouse') engage(); });
+  ['pointerup', 'pointercancel'].forEach(function (ev) { start.addEventListener(ev, function (e) { if (e.pointerType !== 'mouse') setTimeout(release, 250); }); });
+  start.addEventListener('click', function (e) { e.preventDefault(); if (!hold) { engage(); setTimeout(release, 1200); } setTimeout(function () { goTo('#anfrage'); }, 700); });
+  start.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); engage(); setTimeout(release, 1200); setTimeout(function () { goTo('#anfrage'); }, 1300); } });
+  if (REC) window.__recRelease = release;
+
+  // 4. Szene 2: der Satz färbt sich Wort für Wort (nur opacity, gescrubbt).
+  var p = document.getElementById('manifest');
+  (function wrapWords(node) {
+    Array.prototype.slice.call(node.childNodes).forEach(function (n) {
+      if (n.nodeType === 3) {
+        var frag = document.createDocumentFragment();
+        n.textContent.split(/(\s+)/).forEach(function (part) {
+          if (!part) return;
+          if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
+          var sp = document.createElement('span'); sp.className = 'w'; sp.textContent = part; frag.appendChild(sp);
+        });
+        node.replaceChild(frag, n);
+      } else if (n.nodeType === 1) wrapWords(n);
+    });
+  })(p);
+  gsap.fromTo('#manifest .w', { opacity: .3 }, { opacity: 1, ease: 'none', stagger: .04,
+    scrollTrigger: { trigger: p, start: 'top 78%', end: 'bottom 45%', scrub: .5 } });
+
+  // 5. Szene 3: der Film. Clips, currentTime folgt dem Scroll; Match-Cuts hart, die letzte Naht blendet über (1:1 Elektriker-Film).
+  var film = document.getElementById('film'), stage = document.getElementById('stage');
+  var clips = Array.prototype.slice.call(stage.querySelectorAll('.clip')), caps = Array.prototype.slice.call(stage.querySelectorAll('.cap'));
+  var phone = Math.min(screen.width, screen.height) <= 600;
+  var DIR = "assets/";
+  var N = clips.length, seg = 1 / N, FADE = .045;
+  clips.forEach(function (c) { c._v = null; c._pending = null; c._loading = false; });
+  function loadClip(c) {
+    if (c._loading) return; c._loading = true;
+    var url = DIR + c.dataset.leg + (REC ? '.mp4' : phone ? '-m.mp4' : '-1440.mp4');
+    var v = document.createElement('video'); v.muted = true; v.playsInline = true; v.preload = 'auto';
+    v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
+    var attach = function (src) {
+      v.src = src;
+      v.addEventListener('loadedmetadata', function () { c._v = v; c.appendChild(v); v.style.opacity = '0'; });
+      v.addEventListener('seeked', function () { v.style.opacity = '1'; if (c._pending !== null) { var tt = c._pending; c._pending = null; seek(c, tt); } }, { passive: true });
+    };
+    if (location.protocol === 'file:') attach(url);
+    else fetch(url).then(function (r) { if (!r.ok) throw 0; return r.blob(); }).then(function (b) { attach(URL.createObjectURL(b)); }).catch(function () { c._loading = false; });
+  }
+  function seek(c, tt) {
+    var v = c._v; if (!v || !v.duration) return;
+    tt = Math.min(Math.max(tt, 0), v.duration - .04);
+    if (v.seeking) { c._pending = tt; return; }
+    if (Math.abs(v.currentTime - tt) > 1 / 48) v.currentTime = tt;
+  }
+  function loadSequence(i) { if (i >= clips.length) return; var c = clips[i]; loadClip(c);
+    var done = function () { loadSequence(i + 1); }; var tm = setInterval(function () { if (c._v || !c._loading) { clearInterval(tm); done(); } }, 150); }
+  var armed = false;
+  function arm() { if (armed) return; armed = true; loadSequence(0); }
+  var near = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { near.disconnect(); if (document.readyState === 'complete') arm(); else window.addEventListener('load', arm, { once: true }); } }); }, { rootMargin: '60% 0px' });
+  near.observe(film);
+  if (REC) window.addEventListener('load', arm, { once: true });
+  function smooth(x) { x = Math.min(Math.max(x, 0), 1); return x * x * (3 - 2 * x); }
+  function render(prog) {
+    clips.forEach(function (c, i) {
+      var startS = i * seg, local = Math.min(Math.max((prog - startS) / seg, 0), 1);
+      var op = prog >= startS ? 1 : 0;
+      if (i === N - 1) op = smooth((prog - (startS - FADE)) / (2 * FADE));
+      c.style.opacity = op; c.classList.toggle('on', op > .001);
+      if (op > .001 && c._v) seek(c, local * c._v.duration);
+      var last = i === N - 1;
+      var active = prog >= startS && (last || prog < startS + seg);
+      caps[i].classList.toggle('on', active && local > .03 && (last || local < .97));
+    });
+  }
+  render(0);
+  gsap.set(stage, { xPercent: 100, x: 0 });
+  gsap.fromTo(stage, { xPercent: 100, x: 0 }, { xPercent: 0, x: 0, ease: 'none',
+    scrollTrigger: { trigger: film, start: 'top bottom', end: 'top top', scrub: true } });
+  ScrollTrigger.create({ trigger: film, start: 'top top', end: 'bottom bottom', scrub: .5,
+    onUpdate: function (self) { render(self.progress); } });
+
+  // 6. Leistungsregler: beim ersten Eintreten ein kurzer Wink (0 → 22 → 0), danach gehört der Griff dem Finger.
+  ScrollTrigger.create({ trigger: reg, start: 'top 75%', once: true, onEnter: function () {
+    if (REC) return; var o = { p: 0 }; gsap.timeline().to(o, { p: 22, duration: .8, ease: 'power2.inOut', onUpdate: function () { setReg(o.p); } })
+      .to(o, { p: 0, duration: .8, ease: 'power2.inOut', onUpdate: function () { setReg(o.p); } }, '+=.3'); } });
+
+  // 7. Szene 4: Linie zeichnet, Zeile steigt (einmalig).
+  gsap.utils.toArray('.row').forEach(function (row, i) {
+    var tl = gsap.timeline({ scrollTrigger: { trigger: row, start: 'top 92%', toggleActions: 'play none none none', once: true }, delay: (i % 6) * .07 });
+    tl.from(row.querySelector('.rule'), { scaleX: 0, duration: .6, ease: 'power3.out' }, 0)
+      .from([row.querySelector('b'), row.querySelector('span')], { y: 10, opacity: 0, duration: .6, ease: 'power3.out', stagger: .05 }, .05);
+  });
+
+  // 8. Lichtspuren (statt der Ladung): von den Rücklichtern zum Startknopf, mehr, schneller und heller, je näher der Zeiger kommt
+  //    (k = (1 − d/R)^1.6, Radius 720 px), Rastung bei Hover; auf Touch-Geräten zählt, wie nah der Knopf der Bildmitte ist.
+  //    Dazu Funken des Flammenstoßes, im Aufnahmemodus Zeiger und Fahrtstreifen. Ganze Fläche je Bild gelöscht.
+  (function () {
+    var cv = document.getElementById('fx'), ctx = cv.getContext('2d'), W = 0, H = 0, raf = 0, mx = -1e4, my = -1e4, lastY = scrollY, lastT = 0, streak = 0;
+    var fine = REC || matchMedia('(hover:hover) and (pointer:fine)').matches, lock = false, lockT = 0, k = 0, kk = 0, trails = [], scrollDir = 1, sparkTimer = 0;
+    function size() { var dpr = Math.min(devicePixelRatio || 1, 2); W = innerWidth; H = innerHeight; cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); }
+    size(); addEventListener('resize', size);
+    kick = function () { if (!raf) raf = requestAnimationFrame(frame); }; window.kick = kick;
+    var touchy = REC && Math.min(screen.width, screen.height) <= 600;
+    if (fine) addEventListener('pointermove', function (e) { mx = e.clientX; my = e.clientY; kick(); }, { passive: true });
+    document.documentElement.addEventListener('mouseleave', function () { mx = my = -1e4; kick(); });
+    start.addEventListener('pointerenter', function () { lock = true; kick(); });
+    start.addEventListener('pointerleave', function () { lock = false; kick(); });
+    if (lenis) lenis.on('scroll', kick); else ScrollTrigger.addEventListener('scrollEnd', kick);
+    if (REC) { window.__recHide = function () { mx = my = -1e4; lock = false; kick(); }; gsap.ticker.add(kick); }
+    var clamp = function (v, a, b) { return Math.max(a, Math.min(v, b)); };
+    function btn() { var r = start.getBoundingClientRect(); return { r: r, c: [(r.left + r.right) / 2, (r.top + r.bottom) / 2] }; }
+    function target() { // Zielstärke 0..1 (Benjamin 03.11.): steigt mit der Nähe, Maximum knapp außerhalb des Knopfs (1,1–1,6 Radien),
+      // auf dem Knopf selbst 0 (nur Ring, Nadel, Flammen); Touch: Maximum kurz bevor der Knopf die Bildmitte erreicht, in der Mitte 0.
+      var b = btn(), r = b.r, rad = r.width / 2, c = b.c;
+      if (r.bottom < 0 || r.top > H) return 0;
+      if (lock) return 0;
+      if (fine && mx > -1e3) {
+        var d = Math.hypot(mx - c[0], my - c[1]), R = Math.hypot(W, H) * .95;
+        if (d <= rad) return 0;
+        if (d < 1.1 * rad) return (d - rad) / (0.1 * rad);
+        if (d <= 1.6 * rad) return 1;
+        return Math.pow(clamp(1 - (d - 1.6 * rad) / R, 0, 1), 2.4);
+      }
+      if (!fine) { var p = Math.abs(c[1] - H / 2) / (H / 2);
+        if (p < .06) return 0; if (p <= .2) return 1; return Math.pow(clamp(1 - (p - .2) / .8, 0, 1), 1.5); }
+      return 0;
+    }
+    function origins() { // Woher die Spuren kommen: von der Seite des Zeigers (Zeiger selbst + Bildschirmrand dahinter); Touch: oberer/unterer Rand je Scrollrichtung
+      var b = btn(), c = b.c;
+      if (fine && mx > -1e3) {
+        var dx = mx - c[0], dy = my - c[1], d = Math.hypot(dx, dy) || 1, ux = dx / d, uy = dy / d;
+        var tx = ux > 0 ? (W - mx) / ux : ux < 0 ? -mx / ux : 1e9, ty = uy > 0 ? (H - my) / uy : uy < 0 ? -my / uy : 1e9, tt = Math.max(0, Math.min(tx, ty)) + 12;
+        var E = [mx + ux * tt, my + uy * tt], px = -uy, py = ux;
+        return [[mx, my], E, [E[0] + px * 110, E[1] + py * 110], [E[0] - px * 110, E[1] - py * 110], [mx + px * 50, my + py * 50], [mx - px * 50, my - py * 50]];
+      }
+      var y = scrollDir < 0 ? -12 : H + 12;
+      return [[c[0], y], [c[0] - 150, y], [c[0] + 150, y], [c[0] - 70, y], [c[0] + 70, y], [c[0] + 220, y]];
+    }
+    function cursor() {
+      if (touchy) { ctx.globalAlpha = .55; ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(mx, my, 17, 0, 6.283); ctx.fill();
+        ctx.globalAlpha = .9; ctx.lineWidth = 2; ctx.strokeStyle = '#15181c'; ctx.stroke(); ctx.globalAlpha = 1; return; }
+      ctx.save(); ctx.translate(mx, my); ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(0, 17); ctx.lineTo(4.5, 13); ctx.lineTo(7.5, 19.5); ctx.lineTo(10.5, 18); ctx.lineTo(7.5, 11.5); ctx.lineTo(13, 11.5); ctx.closePath();
+      ctx.globalAlpha = 1; ctx.fillStyle = '#f4eee5'; ctx.fill(); ctx.lineWidth = 1.5; ctx.strokeStyle = '#15181c'; ctx.stroke(); ctx.restore(); }
+    function bez(a, c, b, u) { var v = 1 - u; return [v * v * a[0] + 2 * v * u * c[0] + u * u * b[0], v * v * a[1] + 2 * v * u * c[1] + u * u * b[1]]; }
+    var lines = []; for (var i = 0; i < 26; i++) lines.push([Math.random(), Math.random(), .4 + Math.random() * .6]);
+    function frame(now) {
+      raf = 0; ctx.clearRect(0, 0, W, H);
+      var dt = lastT ? Math.min((now - lastT) / 1000, .05) : 1 / 60; lastT = now;
+      var alive = false;
+      // Lichtspuren: fern = ein, zwei schwache, langsame Spuren; nah = viele, schnelle, helle; sie kommen von der Seite des Zeigers
+      var dyS = scrollY - lastY; lastY = scrollY; if (dyS) scrollDir = dyS;
+      k = target(); kk += (k - kk) * (k > kk ? .16 : .05);
+      lockT = lock ? lockT + dt : 0;
+      var fade = lock ? Math.max(0, 1 - lockT / 0.15) : 1; // auf dem Knopf: Spuren in 150 ms ausblenden
+      if (lock && fade === 0) { trails = []; kk = 0; }
+      start.classList.toggle('near', kk > .55 || lock);
+      var want = (k > 0 && !lock) ? Math.round(1 + kk * 8) : 0, goal = btn().c, srcs = origins();
+      while (trails.length < want) trails.push({ u: trails.length ? -Math.random() * .4 : 0, s: trails.length % srcs.length, v: .5 + Math.random() * .5, w: .8 + Math.random() * 1.6, side: (trails.length % 2) ? 1 : -1 }); // die erste Spur startet sofort: auch "fern" ist etwas zu sehen
+      if (trails.length) {
+        ctx.globalCompositeOperation = 'lighter'; ctx.lineCap = 'round';
+        var bw = REC && !touchy ? 1.6 : 1; // Aufnahme: wie die Ladung kräftiger, wird verkleinert angesehen
+        trails.forEach(function (tr) {
+          var a = srcs[tr.s % srcs.length], b = goal, mid = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2], dx = b[0] - a[0], dy = b[1] - a[1], len = Math.hypot(dx, dy) || 1;
+          var c = [mid[0] - dy / len * Math.min(160, len * .25) * tr.side, mid[1] + dx / len * Math.min(160, len * .25) * tr.side];
+          tr.u += tr.v * (0.3 + kk * 1.4) * dt;
+          if (tr.u > 1.05) { tr.u = -Math.random() * .4; if (trails.length > want) { tr.dead = true; return; } }
+          if (tr.u < 0) return;
+          var tail = Math.max(0, tr.u - .12 - .14 * kk), pts = [];
+          for (var j = 0; j <= 10; j++) pts.push(bez(a, c, b, tail + (tr.u - tail) * j / 10));
+          var al = Math.min(1, (0.1 + 0.9 * kk) * (REC ? 1.3 : 1)) * fade;
+          ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]); for (var q = 1; q < pts.length; q++) ctx.lineTo(pts[q][0], pts[q][1]);
+          ctx.lineWidth = (tr.w + 3) * (0.4 + 1.2 * kk) * bw; ctx.strokeStyle = "#d9311c"; ctx.globalAlpha = al * .3; ctx.stroke();
+          ctx.lineWidth = tr.w * (0.4 + 1.2 * kk) * bw; ctx.strokeStyle = "#f37443"; ctx.globalAlpha = al; ctx.stroke();
+          var hd = pts[pts.length - 1]; ctx.globalAlpha = al; ctx.fillStyle = "#f99955"; ctx.beginPath(); ctx.arc(hd[0], hd[1], (1 + 2.4 * kk) * bw, 0, 6.283); ctx.fill();
+        });
+        trails = trails.filter(function (tr) { return !tr.dead; });
+        ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = 1;
+        alive = true;
+      }
+      if (kk < .015 && !want) { trails = []; kk = 0; } else if (kk > .015 || want) alive = true;
+      // Funken: beim Halten auf dem Knopf alle ~0,3 s Nachschub (Afterfire), sonst nur der Stoß vom Anfang
+      if (hold) { sparkTimer += dt; if (sparkTimer > .3) { sparkTimer = 0; spit(5); } alive = true; } else sparkTimer = 0;
+      if (sparks.length) {
+        ctx.globalCompositeOperation = 'lighter';
+        sparks.forEach(function (s) { s.t += dt; var kf = 1 - s.t / s.life; if (kf <= 0) return; alive = true;
+          s.x += s.vx * dt; s.y += s.vy * dt; s.vy += 40 * dt; s.vx *= .96;
+          ctx.globalAlpha = Math.min(1, kf * 1.4); ctx.fillStyle = kf > .5 ? "#f99955" : "#f37443";
+          ctx.beginPath(); ctx.arc(s.x, s.y, s.r * (0.6 + kf), 0, 6.283); ctx.fill(); });
+        sparks = sparks.filter(function (s) { return s.t < s.life; });
+        ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = 1;
+      }
+      if (REC) { // Fahrtstreifen beim schnellen Scrollen (Übergang "Launch"), nur in der Aufnahme
+        var dy2 = dyS, vel = Math.abs(dy2);
+        streak = Math.max(streak * .8, Math.min(1, (vel - 14) / 70));
+        if (streak > .02) { alive = true; ctx.lineCap = 'round';
+          lines.forEach(function (l) { var ln = (40 + 220 * l[2]) * streak, x = l[0] * W, y = ((l[1] * H + (dy2 > 0 ? -now : now) * .6 * l[2]) % H + H) % H;
+            ctx.globalAlpha = .35 * streak * l[2]; ctx.lineWidth = 1.2; ctx.strokeStyle = "#f4eee5";
+            ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x, y + (dy2 > 0 ? ln : -ln)); ctx.stroke(); });
+          ctx.globalAlpha = 1; }
+        if (mx > -1e3) { cursor(); alive = true; }
+      }
+      window.__fx = { trails: trails.length, kk: +kk.toFixed(3), lock: lock, sparks: sparks.length }; // Messpunkt für die Tore (tuning_film.py)
+      html.classList.toggle('fx-on', alive);
+      if (alive) raf = requestAnimationFrame(frame);
+    }
+  })();
+  ScrollTrigger.refresh();
+});
+</script>
+</body>
+</html>
